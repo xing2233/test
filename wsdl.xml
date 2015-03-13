@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions name="shopWS"
+    targetNamespace="http://test.dog.dev/"
+    xmlns:tns="http://test.dog.dev/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soapenc="http://schemas.xmlsoap.org/wsdl/soap/encoding/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns="http://schemas.xmlsoap.org/wsdl/">
+    
+    <!-- types 元素定义 web service 使用的数据类型，-->
+    <types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+            targetNamespace="http://test.dog.dev/">
+        </xsd:schema>
+    </types>
+
+    <!--msssage 元素 可定义每个消息的部件，以及相关联的数据类型-->
+    <message name="testRequest">
+        <part name="term" type="xsd:string"/>
+    </message>
+    <message name="testResponse">
+        <part name="value" type="xsd:string"/>
+    </message>
+    
+    <!--portType 元素是最重要的wsdl元素，它定义了web service可以执行的操作和相关信息
+    它告诉你去哪个web service 连接点，扮演一个控制者的角色
+    -->
+    <portType name="oplist">
+        <operation name="test">
+           <input message="tns:testRequest"/>
+           <output message="tns:testResponse"/>
+        </operation>
+    </portType>
+
+    <!--binging 元素定义每个端口的消息格式和协议细节-->
+    <binding name="cartSoap" type="tns:oplist">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="test">
+           <soap:operation soapAction="http://www.cwtservice.cn/newOperation"/>
+           <input>
+               <soap:body use="literal"
+                namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="literal" namespace="urn:xmethods-delayed-quotes"
+                encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+    </binding>
+    
+    <!--service 元素包含一个或者多个port元素,每个port元素表示一个不同的web服务-->
+    <service name="shopWS">
+        <port name="cartSoap" binding="tns:cartSoap">
+            <soap:address location="http://test.dog.dev/config.php"/>
+        </port>
+    </service>
+    
+    
+</definitions>
